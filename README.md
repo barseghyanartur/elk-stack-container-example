@@ -9,7 +9,7 @@ podman-compose up
 
 ## Services
 
-- [Elasticsearch0](http://localhost:9200/)
+- [Elasticsearch](http://localhost:9200/)
 - [Kibana](http://localhost:5601/)
 - [Logstash](http://localhost:8080/)
 
@@ -20,7 +20,6 @@ podman-compose up
 ```python
 import logging 
 import logstash 
-import sys 
 
 host = "localhost"
 test_logger = logging.getLogger("my-logger")

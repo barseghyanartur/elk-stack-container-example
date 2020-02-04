@@ -27,10 +27,12 @@ LOGGING_CONFIG = {
         'simple': {
             'format': '%(levelname)s %(message)s',
         },
+        # This is going to be used for Elasticsearch/Logstash
         'json': {
             'format': '{"date": "%(asctime)s",'
                       ' "id": "%(id)s",'
                       ' "action": "%(message)s"}',
+            'datefmt': "%Y-%m-%dT%H:%M:%S",  # Elasticsearch datetime format
         },
     },
     'handlers': {

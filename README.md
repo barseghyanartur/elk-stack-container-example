@@ -1,5 +1,5 @@
 # ELK stack
-ELK stack (dev) with Docker and Podman
+ELK stack (dev) with Docker (or Podman)
 
 ## Usage
 

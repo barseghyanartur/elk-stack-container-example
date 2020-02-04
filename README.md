@@ -36,3 +36,17 @@ curl --request POST \
   --header 'content-type: application/json' \
   --data '"Test error message."'
 ```
+
+### From custom logs
+
+**Install requirements**
+
+```shell script
+pip install -r requirements.txt
+```
+
+**Then generate some logs**
+
+```shell script
+python examples/generate.py
+```

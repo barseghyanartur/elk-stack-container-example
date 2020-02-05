@@ -1,7 +1,7 @@
 import argparse
 from datetime import timedelta
 import sys
-from uuid import uuid4
+from random import randint, sample
 
 from faker import Faker
 from freezegun import freeze_time
@@ -18,19 +18,11 @@ __all__ = (
 
 FAKER = Faker()
 IDS = set()
-MAX_RETRIES = 3
+MAX_RETRIES = 10
 
 
-def unique_id(retries=0):
-    id_ = FAKER.pyint()
-    if id_ not in IDS:
-        IDS.add(id_)
-        return id_
-    else:
-        retries += 1
-        if retries > MAX_RETRIES:
-            return uuid4()
-        return unique_id(retries)
+def generate_unique_ids(amount=1000):
+    return sample(range(1, amount + 1), amount)
 
 
 def generate_logs():
@@ -46,11 +38,14 @@ def generate_logs():
     args = parser.parse_args(sys.argv[1:])
     amount = args.amount
 
-    delta = timedelta(seconds=15)
-    for i in range(amount):
-        id_ = unique_id()
-
-        created = FAKER.date_time_between(start_date='-10y', end_date='+10y')
+    milliseconds_delta = timedelta(milliseconds=randint(1, 333))
+    delta = timedelta(seconds=15, milliseconds=randint(1, 333))
+    unique_ids = generate_unique_ids(amount)
+    for id_ in unique_ids:
+        created = (
+            FAKER.date_time_between(start_date='-10y', end_date='+10y')
+            + milliseconds_delta
+        )
         classified = created + delta
         explained = classified + delta
 

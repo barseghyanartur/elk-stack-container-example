@@ -3,8 +3,5 @@ filebeat.inputs:
     paths:
       - /var/log/json*.log*
 
-#output.elasticsearch:
-#  hosts: ["elasticsearch:9200"]
-
 output.logstash:
   hosts: ["logstash:5044"]

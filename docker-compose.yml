@@ -5,7 +5,8 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
     environment: 
       - discovery.type=single-node
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=changeme
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -35,6 +36,11 @@ services:
       - elasticsearch
     ports: 
       - 5601:5601
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
 
   # Filebeat container
   filebeat:
@@ -43,13 +49,16 @@ services:
     volumes:
       # Mount the filebeat configuration so users can make edit
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml.orig
-      # Mount the logs into the filebeat container so we can access and index them using the correspondent filebeat module
+      # Mount the logs into the filebeat container so we can access and
+      # index them using the correspondent filebeat module
       - ./logs/:/var/log/
-      # Named volume fsdata. This is used to persist the registry file between restarts, so to avoid data duplication
+      # Named volume fsdata. This is used to persist the registry file
+      # between restarts, so to avoid data duplication
       - ./data:/usr/share/filebeat/data/
     command: bash -c "cp -fR /usr/share/filebeat/filebeat.yml.orig /usr/share/filebeat/filebeat.yml && chmod go-w /usr/share/filebeat/filebeat.yml && filebeat -e -E -strict.perms=false" --config.reload.automatic
     restart: always
     depends_on:
-      # wait for the these services to come up. This ensures the logs are available and ES exists for indexing
+      # wait for the these services to come up. This ensures the logs are
+      # available and ES exists for indexing
       - elasticsearch
       - logstash

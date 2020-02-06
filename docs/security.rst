@@ -89,7 +89,7 @@ Instruct Logstash about the Elasticsearch credentials.
 
 Kibana Management Interface configuration
 -----------------------------------------
-You should be able to log into `Kibana <http://localhost:5601/>`_ with your
+You should be able to log into `Kibana <http://localhost:5601/>`__ with your
 credentials specified earlier (``elastic:changeme``).
 
 1. Create an index pattern.

@@ -35,7 +35,7 @@ Add messages to Logstash
 
 .. code-block:: shell
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
 **Generate some logs**
 

@@ -126,5 +126,5 @@ credentials specified earlier (``elastic:changeme``).
     Confirm password: test1234
     Roles: read_only_logstash, kibana_dashboard_only_user
 
-You're done. You might give the ``dashboard_only_user`` credentials to the
-client.
+You're done. You might use the ``dashboard_only_user`` credentials to log into
+minimalistic (non admin) Kibana interface to view your data.

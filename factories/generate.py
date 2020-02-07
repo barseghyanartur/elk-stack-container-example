@@ -21,8 +21,8 @@ IDS = set()
 MAX_RETRIES = 10
 
 
-def generate_unique_ids(amount=1000):
-    return sample(range(1, amount + 1), amount)
+def generate_unique_ids(amount=1000, offset=1):
+    return sample(range(offset, amount + offset), amount)
 
 
 def generate_logs():
@@ -35,12 +35,21 @@ def generate_logs():
         type=int,
         help="Amount of logs to generate",
     )
+    parser.add_argument(
+        '--offset',
+        dest="offset",
+        default=1,
+        action='store',
+        type=int,
+        help="Offset of logs to generate",
+    )
     args = parser.parse_args(sys.argv[1:])
     amount = args.amount
+    offset = args.amount
 
     milliseconds_delta = timedelta(milliseconds=randint(1, 333))
     delta = timedelta(seconds=15, milliseconds=randint(1, 333))
-    unique_ids = generate_unique_ids(amount)
+    unique_ids = generate_unique_ids(amount, offset)
     for id_ in unique_ids:
         created = (
             FAKER.date_time_between(start_date='-10y', end_date='+10y')

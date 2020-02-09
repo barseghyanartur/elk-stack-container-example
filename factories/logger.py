@@ -31,6 +31,7 @@ LOGGING_CONFIG = {
         'json': {
             'format': '{"date": "%(asctime)s.%(msecs)03d",'
                       ' "id": "%(id)s",'
+                      ' "success": "%(success)s",'
                       ' "action": "%(message)s"}',
             'datefmt': "%Y-%m-%dT%H:%M:%S",  # Elasticsearch datetime format
         },

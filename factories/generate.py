@@ -59,13 +59,13 @@ def generate_logs():
         explained = classified + delta
 
         with freeze_time(created):
-            LOGGER.info("Created", extra={"id": id_})
+            LOGGER.info("Created", extra={"id": id_, "success": "true"})
 
         with freeze_time(classified):
-            LOGGER.info("Classified", extra={"id": id_})
+            LOGGER.info("Classified", extra={"id": id_, "success": "true"})
 
         with freeze_time(explained):
-            LOGGER.info("Explained", extra={"id": id_})
+            LOGGER.info("Explained", extra={"id": id_, "success": "true"})
 
 
 if __name__ == '__main__':

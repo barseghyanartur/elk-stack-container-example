@@ -41,6 +41,7 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=changeme
 
   # Filebeat container
   filebeat:

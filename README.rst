@@ -20,6 +20,14 @@ Usage
 
     podman-compose up
 
+If you have issues with ports not being available outside the container, 
+run the following command before running ```podman-compose up```:
+
+.. code-block:: shell
+
+    podman-compose down
+    podman stop --all
+
 Services
 --------
 The following services are available.

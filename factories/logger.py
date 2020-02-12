@@ -38,6 +38,13 @@ LOGGING_CONFIG = {
         # This is going to be used for Elasticsearch/Logstash
         'alt_json': {
             'keys': ['asctime', 'id', 'success', 'message'],
+            'rename': {'asctime': 'date', 'message': 'action'},
+            'transform': {
+                'asctime': lambda record: "%s.%03d" % (
+                    record.asctime, 
+                    record.msecs
+                ),
+            },
             '()': 'json_logger.JsonFormatter',
         },
     },

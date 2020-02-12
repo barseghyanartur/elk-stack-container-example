@@ -37,9 +37,9 @@ Some of the code above explained below:
 **filebeat.inputs.tags**
 
 Note, that we send additional tag called ``json`` along, so that later (in the
-Logstash) we could safely rely on that to determine, which kind of data
-shall we be processing (as there may be many types and formats sent to
-Logstash at once).
+Logstash) we could safely rely on that to determine, what kind of data
+structure are we about to be processing (as there may be many types and
+formats sent to Logstash at the same time).
 
 .. code-block:: text
 
@@ -96,7 +96,7 @@ Logstash
     }
 
 We simply check if tags contain ``json``, then treat it as JSON. If we have
-multiple logger producing different JSON structures, we could change the
+multiple logger producing different JSON data structures, we could change the
 ``json`` into more detailed (like ``json-document``, ``json-article``, etc).
 
 We want to avoid records duplication. That's why we bind ``id``, ``action``

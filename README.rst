@@ -1,6 +1,6 @@
 ELK stack
 =========
-ELK stack (dev) with Docker (or Podman).
+ELK stack (example) with Docker (or Podman).
 
 Aim of this repository is to provide a minimalistic example of how to
 set up an ELK cluster for local development. For sake of simplicity, all

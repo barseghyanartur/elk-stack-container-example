@@ -45,7 +45,7 @@ LOGGING_CONFIG = {
                     record.msecs
                 ),
             },
-            '()': 'json_logger.JsonFormatter',
+            '()': 'logging_json_formatter.JsonFormatter',
         },
     },
     'handlers': {

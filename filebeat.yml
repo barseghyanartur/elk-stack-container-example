@@ -1,7 +1,16 @@
 filebeat.inputs:
+
   - input_type: log
     paths:
       - /var/log/json*.log*
+    tags: ["json"]
+
+  - input_type: log
+    paths:
+      - /var/log/alt_json*.log*
+    json.keys_under_root: true
+    json.add_error_key: true
+    tags: ["alt-json"]
 
 output.logstash:
   hosts: ["logstash:5044"]

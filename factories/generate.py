@@ -1,5 +1,5 @@
 import argparse
-from datetime import timedelta
+from datetime import timedelta, datetime
 import sys
 from random import randint, sample
 
@@ -43,18 +43,30 @@ def generate_logs():
         type=int,
         help="Offset of logs to generate",
     )
+    parser.add_argument(
+        '--no-random-time',
+        dest="no_random_time",
+        default=False,
+        action='store_true',
+        help="No random time",
+    )
     args = parser.parse_args(sys.argv[1:])
     amount = args.amount
-    offset = args.amount
+    offset = args.offset
+    no_random_time = args.no_random_time
 
     milliseconds_delta = timedelta(milliseconds=randint(1, 333))
     delta = timedelta(seconds=15, milliseconds=randint(1, 333))
     unique_ids = generate_unique_ids(amount, offset)
     for id_ in unique_ids:
-        created = (
-            FAKER.date_time_between(start_date='-10y', end_date='+10y')
-            + milliseconds_delta
-        )
+        if no_random_time:
+            date_time = datetime.now()
+        else:
+            date_time = FAKER.date_time_between(
+                start_date='-10y',
+                end_date='+10y'
+            )
+        created = date_time + milliseconds_delta
         classified = created + delta
         explained = classified + delta
 

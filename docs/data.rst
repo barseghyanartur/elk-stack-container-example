@@ -36,7 +36,7 @@ Some of the code above explained below:
 
 **filebeat.inputs.tags**
 
-Note, that we send additional tag called "json" along, so that later (in the
+Note, that we send additional tag called ``json`` along, so that later (in the
 Logstash) we could safely rely on that to determine, which kind of data
 shall we be processing (as there may be many types and formats sent to
 Logstash at once).

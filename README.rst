@@ -49,4 +49,4 @@ Add messages to Logstash
 
 .. code-block:: shell
 
-    python factories/generate.py --amount=30000
+    python factories/generate.py --no-random-time --offset=51 --amount=10

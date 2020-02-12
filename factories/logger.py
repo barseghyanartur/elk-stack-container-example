@@ -35,18 +35,6 @@ LOGGING_CONFIG = {
                       ' "action": "%(message)s"}',
             'datefmt': "%Y-%m-%dT%H:%M:%S",  # Elasticsearch datetime format
         },
-        # This is going to be used for Elasticsearch/Logstash
-        'alt_json': {
-            'keys': ['asctime', 'id', 'success', 'message'],
-            'rename': {'asctime': 'date', 'message': 'action'},
-            'transform': {
-                'asctime': lambda record: "%s.%03d" % (
-                    record.asctime, 
-                    record.msecs
-                ),
-            },
-            '()': 'logging_json_formatter.JsonFormatter',
-        },
     },
     'handlers': {
         'console': {
@@ -70,18 +58,10 @@ LOGGING_CONFIG = {
             'backupCount': 99,
             'formatter': 'json',
         },
-        'alt_json': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_DIR_NAME, "alt_json.log"),
-            'maxBytes': 1048576,
-            'backupCount': 99,
-            'formatter': 'alt_json',
-        },
     },
     'loggers': {
         'example': {
-            'handlers': ['json', 'alt_json'],
+            'handlers': ['json'],
             'propagate': False,
         },
     },

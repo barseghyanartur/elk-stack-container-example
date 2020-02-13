@@ -12,6 +12,9 @@ LOGS_DIR_NAME = os.path.abspath(
     os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs')
 )
 
+if not os.path.exists(LOGS_DIR_NAME):
+    os.mkdir(LOGS_DIR_NAME)
+
 LOGGING_CONFIG = {
     'version': 1,
     'disable_existing_loggers': False,

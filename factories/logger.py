@@ -38,7 +38,7 @@ LOGGING_CONFIG = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },

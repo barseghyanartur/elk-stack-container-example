@@ -3,7 +3,7 @@ Security
 It's important to understand, that security for each of the components for the
 ELK stack is configured separately. For instance, you can password protect
 Elasticsearch and still use un-protected Kibana. Same way you could access
-Logstash without a password, but since instruct Logstash to use password
+Logstash without a password, but instruct Logstash to use password
 protected Elasticsearch.
 
 Minimal security setup is described below briefly, in a form of easily 

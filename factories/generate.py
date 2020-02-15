@@ -17,7 +17,6 @@ __all__ = (
 
 
 FAKER = Faker('en_GB')
-IDS = set()
 MAX_RETRIES = 10
 
 

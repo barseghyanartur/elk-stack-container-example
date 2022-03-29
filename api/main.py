@@ -112,7 +112,7 @@ class LogView(APIView):
         try:
             json.dumps(APIView)
         except Exception as err:
-            LOGGER.exception(err)
+            LOGGER.exception(err, extra=request.data)
 
         return Response(request.data)
 

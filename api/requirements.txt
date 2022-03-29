@@ -6,3 +6,4 @@ freezegun
 ipdb
 ipython
 python-json-logger
+elastic-apm

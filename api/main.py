@@ -26,6 +26,7 @@ if not os.path.exists(LOGS_DIR_NAME):
 
 INSTALLED_APPS = [
     "rest_framework",
+    "elasticapm.contrib.django",
 ]
 
 LOGGING = {

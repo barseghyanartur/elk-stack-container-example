@@ -1,1 +1,1 @@
--r factories/requirements.txt
+-r api/requirements.txt

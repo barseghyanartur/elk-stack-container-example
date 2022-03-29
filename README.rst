@@ -38,3 +38,15 @@ Add messages to Logstash
 
     make bash
     python /usr/src/app/ingest.py --no-random-time --offset=51 --amount=10
+
+**Ingest logs using sample ingest API**
+
+Make a POST request to the following endpoint: http://localhost:8000/api/log/
+
+.. code-block:: json
+
+    {
+        "message": "Classified",
+        "id": "39",
+        "success": "true"
+    }

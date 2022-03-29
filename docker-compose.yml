@@ -10,6 +10,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    stdin_open: true
+    tty: true
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.6.0
@@ -26,6 +28,8 @@ services:
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
     command: logstash -f /usr/share/logstash/pipeline/logstash.conf --config.reload.automatic
+    stdin_open: true
+    tty: true
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.6.0
@@ -40,6 +44,8 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=true
       - ELASTIC_PASSWORD=changeme
+    stdin_open: true
+    tty: true
 
   # Filebeat container
   filebeat:
@@ -50,7 +56,7 @@ services:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml.orig
       # Mount the logs into the filebeat container so we can access and
       # index them using the correspondent filebeat module
-      - ./logs/:/var/log/
+      - logs:/var/log/
       # Named volume fsdata. This is used to persist the registry file
       # between restarts, so to avoid data duplication
       - ./data:/usr/share/filebeat/data/
@@ -61,6 +67,8 @@ services:
       # available and ES exists for indexing
       - elasticsearch
       - logstash
+    stdin_open: true
+    tty: true
 
   ingest-api:
     container_name: ingest-api
@@ -72,10 +80,18 @@ services:
     volumes:
       - ./api:/usr/src/app
       - ./api/entrypoint.sh:/entrypoint.sh
-      - ../logs:/usr/src/app/logs
+      - logs:/usr/src/logs
     entrypoint: /entrypoint.sh runserver 0.0.0.0:8000 --traceback -v 3
     depends_on:
       - elasticsearch
       - logstash
     stdin_open: true
     tty: true
+
+volumes:
+  logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./logs/
+      o: bind

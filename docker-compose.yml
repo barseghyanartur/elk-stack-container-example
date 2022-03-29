@@ -61,3 +61,21 @@ services:
       # available and ES exists for indexing
       - elasticsearch
       - logstash
+
+  ingest-api:
+    container_name: ingest-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+        - "8000:8000"
+    volumes:
+      - ./api:/usr/src/app
+      - ./api/entrypoint.sh:/entrypoint.sh
+      - ../logs:/usr/src/app/logs
+    entrypoint: /entrypoint.sh runserver 0.0.0.0:8000 --traceback -v 3
+    depends_on:
+      - elasticsearch
+      - logstash
+    stdin_open: true
+    tty: true

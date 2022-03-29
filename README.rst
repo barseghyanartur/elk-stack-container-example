@@ -12,21 +12,7 @@ Usage
 
 .. code-block:: shell
 
-    docker-compose up
-
-**Using Podman**
-
-.. code-block:: shell
-
-    podman-compose up
-
-If you have issues with ports not being available outside the container, 
-run the following command before running ```podman-compose up```:
-
-.. code-block:: shell
-
-    podman-compose down
-    podman stop --all
+    make run
 
 Services
 --------
@@ -36,17 +22,19 @@ The following services are available.
 - `Kibana <http://localhost:5601/>`__
 - Logstash
 - Filebeat
+- `Sample ingest API (Django based) <http://localhost:8000/api/log/>`__
 
 Add messages to Logstash
 ------------------------
-**Install requirements**
-
-.. code-block:: shell
-
-    pip install -r requirements.txt
-
 **Generate some logs**
 
 .. code-block:: shell
 
-    python factories/generate.py --no-random-time --offset=51 --amount=10
+    make ingest-logs
+
+**Generate some logs with parameters**
+
+.. code-block:: shell
+
+    make bash
+    python /usr/src/app/ingest.py --no-random-time --offset=51 --amount=10

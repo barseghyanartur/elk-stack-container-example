@@ -1,4 +1,0 @@
-faker
-freezegun
-ipython
-ipdb

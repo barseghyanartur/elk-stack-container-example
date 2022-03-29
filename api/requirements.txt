@@ -1,0 +1,8 @@
+django-log-request-id
+django-micro
+djangorestframework
+faker
+freezegun
+ipdb
+ipython
+python-json-logger

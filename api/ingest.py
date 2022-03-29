@@ -6,17 +6,15 @@ from random import randint, sample
 from faker import Faker
 from freezegun import freeze_time
 
-from logger import LOGGER
+from main import LOGGER
 
-__author__ = 'Artur Barseghyan'
-__copyright__ = '2020 Artur Barseghyan'
-__license__ = 'GPL-2.0-only OR LGPL-2.1-or-later'
-__all__ = (
-    'generate_logs',
-)
+__author__ = "Artur Barseghyan"
+__copyright__ = "2020-2022 Artur Barseghyan"
+__license__ = "GPL-2.0-only OR LGPL-2.1-or-later"
+__all__ = ("generate_logs",)
 
 
-FAKER = Faker('en_GB')
+FAKER = Faker("en_GB")
 MAX_RETRIES = 10
 
 
@@ -25,28 +23,28 @@ def generate_unique_ids(amount=1000, offset=1):
 
 
 def generate_logs():
-    parser = argparse.ArgumentParser(description='Generate logs')
+    parser = argparse.ArgumentParser(description="Generate logs")
     parser.add_argument(
-        '--amount',
+        "--amount",
         dest="amount",
         default=1000,
-        action='store',
+        action="store",
         type=int,
         help="Amount of logs to generate",
     )
     parser.add_argument(
-        '--offset',
+        "--offset",
         dest="offset",
         default=1,
-        action='store',
+        action="store",
         type=int,
         help="Offset of logs to generate",
     )
     parser.add_argument(
-        '--no-random-time',
+        "--no-random-time",
         dest="no_random_time",
         default=False,
-        action='store_true',
+        action="store_true",
         help="No random time",
     )
     args = parser.parse_args(sys.argv[1:])
@@ -61,10 +59,7 @@ def generate_logs():
         if no_random_time:
             date_time = datetime.now()
         else:
-            date_time = FAKER.date_time_between(
-                start_date='-10y',
-                end_date='+10y'
-            )
+            date_time = FAKER.date_time_between(start_date="-10y", end_date="+10y")
         created = date_time + milliseconds_delta
         classified = created + delta
         explained = classified + delta
@@ -79,5 +74,5 @@ def generate_logs():
             LOGGER.info("Explained", extra={"id": id_, "success": "true"})
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     generate_logs()

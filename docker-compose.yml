@@ -10,8 +10,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    volumes:
-      - logs:/var/log/ # This is not required. ATM used as a temporary storage to store/exchange some files.
+#    volumes:
+#      - logs:/var/log/ # This is not required. ATM used as a temporary storage to store/exchange some files.
     stdin_open: true
     tty: true
 

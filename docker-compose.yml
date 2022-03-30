@@ -76,6 +76,8 @@ services:
 
   apm:
     image: "docker.elastic.co/apm/apm-server:7.10.0"
+    cap_add: [ "CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID" ]
+    cap_drop: [ "ALL" ]
     environment:
       ES_HOST: elasticsearch
       ES_PORT: "9200"
@@ -88,6 +90,29 @@ services:
       KIBANA_PASS: "changeme"
     ports:
       - "8200:8200"
+    command: >
+      apm-server -e
+        -E apm-server.rum.enabled=true
+        -E setup.kibana.host=kibana:5601
+        -E setup.template.settings.index.number_of_replicas=0
+        -E apm-server.kibana.enabled=true
+        -E apm-server.kibana.host=kibana:5601
+        -E apm-server.kibana.username="elastic"
+        -E apm-server.kibana.password="changeme"
+        -E output.elasticsearch.hosts=["elasticsearch:9200"]
+        -E output.elasticsearch.username="elastic"
+        -E output.elasticsearch.password="changeme"
+    depends_on:
+      # wait for the these services to come up. This ensures the logs are
+      # available and ES exists for indexing
+      - elasticsearch
+      - kibana
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    stdin_open: true
+    tty: true
 
   ingest-api:
     container_name: ingest-api

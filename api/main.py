@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+from logging import getLevelName
 
 from django_micro import configure, route, run
 
@@ -27,7 +28,19 @@ if not os.path.exists(LOGS_DIR_NAME):
 INSTALLED_APPS = [
     "rest_framework",
     "elasticapm.contrib.django",
+    "django_extensions",
 ]
+
+ELASTIC_APM = {
+    # Set required service name. Allowed characters:
+    # a-z, A-Z, 0-9, -, _, and space
+    "SERVICE_NAME": "apm",
+    # Use if APM Server requires a token
+    "SECRET_TOKEN": "",
+    # Set custom APM Server URL (default: http://localhost:8200)
+    "SERVER_URL": "http://apm:8200",
+    "DEBUG": True,
+}
 
 LOGGING = {
     "version": 1,
@@ -44,7 +57,7 @@ LOGGING = {
     "root": {
         "level": "DEBUG",
         "filters": ["request_id"],
-        "handlers": ["console", "json"],
+        "handlers": ["console", "json", "elasticapm"],
     },
     "handlers": {
         "console": {
@@ -61,6 +74,10 @@ LOGGING = {
             "filename": os.path.join(LOGS_DIR_NAME, "json.log"),
             "maxBytes": 1048576,
             "backupCount": 99,
+        },
+        "elasticapm": {
+            "level": "WARNING",
+            "class": "elasticapm.contrib.django.handlers.LoggingHandler",
         },
     },
     "loggers": {
@@ -82,6 +99,9 @@ DATABASES = {
 
 MIDDLEWARE = [
     "log_request_id.middleware.RequestIDMiddleware",  # This should be at the top
+    "elasticapm.contrib.django.middleware.TracingMiddleware",
+    "elasticapm.contrib.django.middleware.Catch404Middleware",
+    "elasticapm.contrib.django.middleware.ErrorIdMiddleware",
 ]
 
 SECRET_KEY = "123456"
@@ -96,37 +116,81 @@ LOGGER = logging.getLogger(__name__)
 
 from django.contrib import admin
 from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import permissions
 
 
-class LogView(APIView):
+def _debug(request):
+    LOGGER.debug(request.data)
+
+
+def _info(request):
+    LOGGER.info(request.data)
+
+
+def _warning(request):
+    LOGGER.warning(request.data)
+
+
+def _error(request):
+    try:
+        json.dumps(APIView)
+    except Exception as err:
+        LOGGER.exception(err, extra=request.data)
+
+
+_LEVEL_NAME_MAPPING = {
+    getLevelName(logging.DEBUG): _debug,
+    getLevelName(logging.INFO): _info,
+    getLevelName(logging.WARNING): _warning,
+    getLevelName(logging.ERROR): _error,
+}
+
+
+class LogView(ViewSet):
     """Log view."""
 
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request, format=None):
+    @action(methods=["get", "post"], detail=False, name="log")
+    def log(self, request, format=None):
         """Current request."""
-        LOGGER.warning(request.data)
-        LOGGER.info(request.data)
-        LOGGER.debug(request.data)
-        try:
-            json.dumps(APIView)
-        except Exception as err:
-            LOGGER.exception(err, extra=request.data)
+        if (
+            "levelname" in request.data
+            and request.data["levelname"] in _LEVEL_NAME_MAPPING
+        ):
+            func = _LEVEL_NAME_MAPPING[request.data["levelname"]]
+            request.data.pop("levelname")
+            func(request)
+        else:
+            _warning(request)
+            _info(request)
+            _debug(request)
+            _error(request)
 
         return Response(request.data)
 
-    post = get
+    @action(methods=["get", "post"], detail=False, name="error", url_path="log/error")
+    def error(self, request):
+        """Throw an exception."""
+        json.dumps(APIView)
 
 
 # ************************************************************************
 # **************************** django routes *****************************
 # ************************************************************************
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
+router = DefaultRouter()
+router.register("", LogView, basename="log")
+# urlpatterns = [
+#     path("log/", LogView.as_view()),
+# ]
 urlpatterns = [
-    path("log/", LogView.as_view()),
+    path("", include(router.urls)),
 ]
 
 route("admin/", admin.site.urls),

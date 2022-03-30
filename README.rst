@@ -20,8 +20,9 @@ The following services are available.
 
 - `Elasticsearch <http://localhost:9200/>`__
 - `Kibana <http://localhost:5601/>`__
-- Logstash
+- Logstash (on port 5044)
 - Filebeat
+- APM (on port 8200)
 - `Sample ingest API (Django based) <http://localhost:8000/api/log/>`__
 
 Add messages to Logstash

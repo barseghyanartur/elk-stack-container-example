@@ -2,6 +2,8 @@ django-extensions
 django-log-request-id
 django-micro
 djangorestframework
+drf-spectacular
+drf-spectacular-sidecar
 elastic-apm
 faker
 freezegun

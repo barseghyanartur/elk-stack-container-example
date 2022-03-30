@@ -27,6 +27,7 @@ if not os.path.exists(LOGS_DIR_NAME):
 
 INSTALLED_APPS = [
     "rest_framework",
+    "drf_spectacular",
     "elasticapm.contrib.django",
     "django_extensions",
 ]
@@ -40,6 +41,25 @@ ELASTIC_APM = {
     # Set custom APM Server URL (default: http://localhost:8200)
     "SERVER_URL": "http://apm:8200",
     "DEBUG": True,
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Ingest API",
+    "DESCRIPTION": "Ingest API documentation.",
+    "VERSION": "0.1",
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # CDNs for swagger and redoc. You can change the version or even host your
+    # own depending on your requirements.
+    'SWAGGER_UI_DIST': 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest',
+    'SWAGGER_UI_FAVICON_HREF': 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/favicon-32x32.png',
+    'REDOC_DIST': 'https://cdn.jsdelivr.net/npm/redoc@latest',
 }
 
 LOGGING = {
@@ -155,7 +175,7 @@ class LogView(ViewSet):
     permission_classes = [permissions.AllowAny]
 
     @action(methods=["get", "post"], detail=False, name="log")
-    def log(self, request, format=None):
+    def log(self, request):
         """Current request."""
         if (
             "levelname" in request.data
@@ -182,6 +202,7 @@ class LogView(ViewSet):
 # **************************** django routes *****************************
 # ************************************************************************
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -191,6 +212,10 @@ router.register("", LogView, basename="log")
 # ]
 urlpatterns = [
     path("", include(router.urls)),
+    # Optional schema UI:
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="api-swagger"),
+    path("redoc/", SpectacularRedocView.as_view(url_name="api-schema"), name="api-redoc"),
 ]
 
 route("admin/", admin.site.urls),

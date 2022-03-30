@@ -47,7 +47,31 @@ Make a POST request to the following endpoint: http://localhost:8000/api/log/
 .. code-block:: json
 
     {
-        "message": "Classified",
         "id": "39",
+        "action": "Classified",
+        "success": "true"
+    }
+
+To enforce a certain log level (available options ``DEBUG``, ``INFO``,
+``WARNING``, ``ERROR``), do as follows:
+
+.. code-block:: json
+
+    {
+        "id": "39",
+        "action": "Classified",
+        "success": "true",
+        "levelname": "ERROR"
+    }
+
+**Force an unhandled exception**
+
+Make a POST request to the following endpoint: http://localhost:8000/api/log/error/
+
+.. code-block:: json
+
+    {
+        "id": "39",
+        "action": "Classified",
         "success": "true"
     }

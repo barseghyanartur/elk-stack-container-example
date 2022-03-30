@@ -8,3 +8,4 @@ xpack.security.encryptionKey: "1234567890123456789012345678901234567890"
 xpack.encryptedSavedObjects.encryptionKey: "1234567890123456789012345678901234567890"
 xpack.actions.allowedHosts: ["*"]
 xpack.actions.enabledActionTypes: ["*"]
+#server.ssl.keystore.path: "/usr/share/kibana/config/kibana-server.p12"

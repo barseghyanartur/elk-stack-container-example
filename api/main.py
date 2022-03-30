@@ -175,7 +175,7 @@ class LogView(ViewSet):
     @action(methods=["get", "post"], detail=False, name="error", url_path="log/error")
     def error(self, request):
         """Throw an exception."""
-        json.dumps(APIView)
+        json.loads(APIView)
 
 
 # ************************************************************************
